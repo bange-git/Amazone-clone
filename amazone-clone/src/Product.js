@@ -41,6 +41,7 @@ function Product({id, title, image, price, rating}) {
       </div>
 
       <img 
+      className='product_image'
       alt='product display'
       src={image}
       />
