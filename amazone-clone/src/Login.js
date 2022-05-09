@@ -1,12 +1,43 @@
 import React, {useState} from 'react';
-import {Link} from 'react-router-dom';
-import './Login.css'
+import {Link, useNavigate } from 'react-router-dom';
+import './Login.css';
+import {auth} from './firebase.js';
+import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth"
+
 
 function Login() {
-
+  const navigate= useNavigate();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
+  const signIn = async(e) =>{
+     e.preventDefault()
+     try {
+      const userCredential = await signInWithEmailAndPassword(auth, email, password)
+      console.log(userCredential.user)
+      navigate('/');
+      }
+    catch(error){
+      console.log(error)
+    }
+  };
+
+  const register = async(e) => {
+    e.preventDefault();
+    try {
+      const userCredential = await createUserWithEmailAndPassword(auth, email, password)
+      console.log(userCredential.user)
+      navigate('/');
+      }
+    catch(error){
+      console.log(error)
+    }
+    // auth.createUserWithEmailAndPassword(email, password)
+    // .then((auth) => {
+    //   //it is successfully created a new user with email & password
+    //   console.log(auth);
+    // }).catch(error => alert(error.message))
+  }
 
   return (
     <div className='login'>
@@ -29,13 +60,13 @@ function Login() {
               onChange={(e)=>setPassword(e.target.value)}
               />
 
-              <button className='login_signInButton'>Sign In</button>
+              <button onClick={signIn} className='login_signInButton'>Sign In</button>
            </form>
 
            <p className='login_terms'>By Signing In, you agree to Amazon's 
              fake clone Conditions of Use and Privacy Notice.</p>
 
-          <button className='login_registerButton'>Create an Amazon account</button>
+          <button onClick={register} className='login_registerButton'>Create an Amazon account</button>
       </div>
 
     </div>
